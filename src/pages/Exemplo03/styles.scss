@@ -1,0 +1,13 @@
+#canvas-container {
+  background-color: cadetblue;
+  border: 1px solid #444;
+  height: 600px;
+  width: 600px;
+  padding: 30px;
+
+  #canvas {
+    border: 1px solid red;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
