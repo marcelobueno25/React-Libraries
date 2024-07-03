@@ -20,7 +20,10 @@ const Box = ({ position }) => {
         position={position}
         scale={clicked ? 1.5 : 1}
         onClick={(event) => click(!clicked)}
-        onPointerOver={(event) => (event.stopPropagation(), hover(true))}
+        onPointerOver={(event) => {
+          event.stopPropagation();
+          hover(true);
+        }}
         onPointerOut={(event) => hover(false)}
       >
         <boxGeometry args={[2, 2, 2]} />
