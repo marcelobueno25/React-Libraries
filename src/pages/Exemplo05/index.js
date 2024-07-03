@@ -1,84 +1,91 @@
 import React, { useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import {
+  OrbitControls,
+  AccumulativeShadows,
+  RandomizedLight,
+} from "@react-three/drei";
 import "./styles.scss";
 
-const Box = ({ setActive, active, position, color }) => {
-  const ref = useRef();
-  useFrame(() => {
-    ref.current.rotation.x += 0.003;
-    ref.current.rotation.y += 0.003;
-  });
+const Box = ({ position }) => {
+  const [hovered, hover] = useState(false);
+  const [clicked, click] = useState(false);
+
+  //useFrame((state, delta) => (refMesh.current.rotation.x += delta));
 
   return (
-    <mesh
-      ref={ref}
-      castShadow
-      position={position}
-      onClick={() => setActive(!active)}
-    >
-      <boxGeometry args={[2, 3, 2]} />
-      <meshStandardMaterial color={color} />
-    </mesh>
+    <group position={[0, -0.65, 0]}>
+      <mesh
+        castShadow
+        position={position}
+        scale={clicked ? 1.5 : 1}
+        onClick={(event) => click(!clicked)}
+        onPointerOver={(event) => (event.stopPropagation(), hover(true))}
+        onPointerOut={(event) => hover(false)}
+      >
+        <boxGeometry args={[2, 2, 2]} />
+        <meshStandardMaterial
+          metalness={1}
+          color={hovered ? "hotpink" : "orange"}
+        />
+      </mesh>
+      <AccumulativeShadows
+        temporal
+        frames={200}
+        color="purple"
+        colorBlend={0.5}
+        opacity={1}
+        scale={10}
+        alphaTest={0.85}
+      >
+        <RandomizedLight
+          amount={8}
+          radius={5}
+          ambient={0.5}
+          position={[5, 3, 2]}
+          bias={0.001}
+        />
+      </AccumulativeShadows>
+    </group>
   );
 };
 
-const Plane = () => {
+function Dodecahedron(props) {
+  const meshRef = useRef();
+  const [hovered, hover] = useState(false);
+  const [clicked, click] = useState(false);
+  useFrame(() => (meshRef.current.rotation.x += 0.01));
   return (
-    <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[2, -3, 0]}>
-      <planeGeometry args={[20, 20]} />
-      <meshStandardMaterial color="lightgray" />
-    </mesh>
+    <group {...props}>
+      <mesh
+        ref={meshRef}
+        scale={clicked ? 1.5 : 1}
+        onClick={() => click(!clicked)}
+        onPointerOver={() => hover(true)}
+        onPointerOut={() => hover(false)}
+      >
+        <dodecahedronGeometry args={[0.75]} />
+        <meshStandardMaterial color={hovered ? "hotpink" : "#5de4c7"} />
+      </mesh>
+    </group>
   );
-};
+}
 
 const Exemplo05 = () => {
-  const [active, setActive] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const ref2 = useRef();
-
   return (
     <>
-      <h1>Exemplo03 - {active ? "ATIVO" : "DESATIVADO"}</h1>
       <div id="canvas-container">
-        {!!loading && <h3>carregando...</h3>}
-        <Canvas
-          id="canvas"
-          dpr={[1, 2]}
-          camera={{ position: [0, 0, -10] }}
-          onCreated={() => setLoading(false)}
-        >
-          <OrbitControls />
+        <Canvas id="canvas" camera={{ position: [3, 3, 5] }} shadows>
           <ambientLight intensity={Math.PI / 2} />
           <pointLight
-            ref={ref2}
-            position={[0, 0, -10]}
+            position={[0, 0, 3]}
+            scale={0.2}
             decay={0}
             intensity={Math.PI}
           />
-          {/* <PointLightHelper args={[ref2, size]} /> */}
-          <spotLight
-            position={[10, 10, 10]}
-            angle={0.15}
-            penumbra={1}
-            decay={0}
-            intensity={Math.PI}
-          />
-          {/* <perspectiveCamera fov={75} position={[0, 0, 5]} /> */}
-          <orthographicCamera makeDefault position={[0, 0, 5]} zoom={1} />
-          {/* <Box
-            color={"blue"}
-            position={[-2, 0, 0]}
-            setActive={setActive}
-            active={active}
-          /> */}
-          <Box
-            color={"green"}
-            position={[2, 0, 0]}
-            setActive={setActive}
-            active={active}
-          />
-          <Plane />
+          <Box position={[0, -3, 0]} />
+          <Dodecahedron />
+          <OrbitControls minPolarAngle={0} maxPolarAngle={Math.PI / 2.1} />
         </Canvas>
       </div>
     </>

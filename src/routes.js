@@ -6,6 +6,7 @@ import Exemplo02 from "./pages/Exemplo02";
 import Exemplo03 from "./pages/Exemplo03";
 import Exemplo04 from "./pages/Exemplo04";
 import Exemplo05 from "./pages/Exemplo05";
+import Mapa from "./pages/Mapa";
 
 const Router = () => {
   return (
@@ -17,6 +18,7 @@ const Router = () => {
         <Route path="/exemplo03" element={<Exemplo03 />} />
         <Route path="/exemplo04" element={<Exemplo04 />} />
         <Route path="/exemplo05" element={<Exemplo05 />} />
+        <Route path="/mapa" element={<Mapa />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Html, OrbitControls, useProgress } from "@react-three/drei";
-import "./styles.scss";
 import CardMercedes from "../../components/CardMercedes";
+import "./styles.scss";
 
 function Loader() {
   const { progress } = useProgress();
@@ -12,7 +12,7 @@ function Loader() {
 function Scene() {
   return (
     <>
-      <Suspense fallback={() => <Loader />}>
+      <Suspense fallback={<Loader />}>
         <CardMercedes />
       </Suspense>
       <OrbitControls onChange={(e) => console.log(e.target.object)} />

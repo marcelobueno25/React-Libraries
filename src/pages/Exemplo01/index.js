@@ -1,8 +1,22 @@
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { Html, OrbitControls } from "@react-three/drei";
 import Heart2 from "../../components/Heart2";
 import "./styles.scss";
+
+function Loader() {
+  return <Html center>carregado...</Html>;
+}
+
+const Scene = () => {
+  return (
+    <>
+      <Suspense fallback={<Loader />}>
+        <Heart2 />
+      </Suspense>
+    </>
+  );
+};
 
 const Exemplo01 = () => {
   return (
@@ -17,9 +31,7 @@ const Exemplo01 = () => {
         >
           <ambientLight intensity={0.5} />
           <directionalLight position={[10, 10, 5]} intensity={1} />
-          <Suspense fallback={() => <h1>carregando...</h1>}>
-            <Heart2 />
-          </Suspense>
+          <Scene />
           <OrbitControls
             enableRotate={true}
             enableZoom={false}

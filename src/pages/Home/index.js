@@ -32,6 +32,11 @@ const Home = () => {
             <Button variant="contained">Mesh 3D - 2</Button>
           </Link>
         </Grid>
+        <Grid item>
+          <Link to="/mapa">
+            <Button variant="contained">Mapa</Button>
+          </Link>
+        </Grid>
       </Grid>
     </div>
   );
